@@ -1,0 +1,6 @@
+build/
+lib/*.so
+lib/__pycache__/
+gencode/*
+src/__pycache__/
+*.npz

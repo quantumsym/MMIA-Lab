@@ -1,0 +1,5 @@
+/__pycache__
+**/*test*
+.idea
+.ipynb_checkpoints
+**/playground*
