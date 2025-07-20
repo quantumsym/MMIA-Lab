@@ -1,9 +1,8 @@
 # MMIA-Lab
 Laboratorio Didattico per il libro
 
-* Metodi Matematici dell'Intelligenza Artificiale
-* Mathematical Methods of Artificial Intelligence
-
+* Mathematical Methods of Artificial Intelligence  (edizione internazionale in inglese)
+* Metodi Matematici dell'Intelligenza Artificiale  (edizione italiana)
 
 Autori:
 
@@ -13,12 +12,8 @@ Brunello Tirozzi, Camillo Tassi, Sandro Magrì
 ![Metodi Matematici dell'Intelligenza Artificiale](cover02.jpeg)
 
 
-Per informazioni scrivere a:
+Per informazioni scrivere a sandro@freenetst.it od a s.magri@quantumsym.com
 
-sandro@freenetst.it 
 
-oppure a:
-
-s.magri@quantumsym.com
 
 
