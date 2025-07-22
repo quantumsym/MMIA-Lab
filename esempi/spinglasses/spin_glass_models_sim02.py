@@ -17,7 +17,7 @@ https://lewiscoleblog.com/spin-glass-models-2
 
 import numpy as np
 import matplotlib.pyplot as plt
-%matplotlib inline
+#%matplotlib inline
 
 # Fix random seed
 np.random.seed(123)

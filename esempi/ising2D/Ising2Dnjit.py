@@ -11,44 +11,43 @@ import matplotlib.pyplot as plt
 #%matplotlib inline
 ###  Uncomment to import/process/export data with Pandas
 #import pandas as pd
-###  Uncomment to optimize CPU execution with Numba
+###  Optimize CPU execution with Numba
 from numba import njit
+
 
 #---------------------------------------------------
 # Test parameters
 #L = 100      # lattice side length
 #p = 0.1     # probability of spin −1
 #J = 1.0     # coupling constant
-#seed = 123  # fixed rng seed
+seed = 123  # fixed rng seed
 
 # ------------------------------------------------------------------
 # 0. Global Random Number Generator with reproducible seed
 # ------------------------------------------------------------------
-#rng = np.random.default_rng(seed)      # Generator instance with fixed seed
+rng = np.random.default_rng(seed)      # Generator instance with fixed seed
 
 
 # ------------------------------------------------------------------
 # 1. Lattice initialization
 # ------------------------------------------------------------------
-def initialize_lattice(seed: int = 1234,L: int = 50, p: float = 0.5) -> np.ndarray:
+def initialize_lattice(L: int = 50, p: float = 0.5) -> np.ndarray:
     """
     Generate L×L lattice of ±1 spins with probabilities:
       - p     for spin −1
       - 1−p   for spin +1
     Uses rng.choice for weighted sampling.
     """
-    rng = np.random.default_rng(seed)      # Generator instance with fixed seed
     # array of possible states and their probabilities
     states = np.array([-1, 1], dtype=int)
     probs  = np.array([p, 1.0 - p])
     lattice = rng.choice(states, size=(L, L), p=probs)
     return lattice
 
-
 # ------------------------------------------------------------------
 # 2A. Local bond energy right & bottom (periodic boundary conditions)
 # ------------------------------------------------------------------
-@njit(cache=True,fastmath=True)
+@njit(cache=True, fastmath=True)
 def local_bond_energy_rb(spins: np.ndarray, i: int, j: int,
                          J: float = 1.0) -> float:
     """
@@ -69,7 +68,7 @@ def local_bond_energy_rb(spins: np.ndarray, i: int, j: int,
 # ------------------------------------------------------------------
 # 2B. Local bond energy all neighbors (periodic boundary conditions)
 # ------------------------------------------------------------------
-@njit(cache=True,fastmath=True)
+@njit(cache=True, fastmath=True)
 def local_bond_energy_all(spins: np.ndarray, i: int, j: int,
                           J: float = 1.0) -> float:
     """
@@ -94,10 +93,14 @@ def local_bond_energy_all(spins: np.ndarray, i: int, j: int,
     return -J * s * neighbors_sum
 
 
+@njit(cache=True, fastmath=True)
+def flip_delta_Energy(spins: np.ndarray, i: int , j: int, J: float = 1.0) -> float:
+    return - 2 * local_bond_energy_all(spins, i, j,J )
+
 # ------------------------------------------------------------------
 # 3. Total energy calculation
 # ------------------------------------------------------------------
-@njit(cache=True,fastmath=True)
+@njit(cache=True, fastmath=True)
 def calculate_total_energy(spins: np.ndarray, J: float = 1.0) -> float:
     """
     Calculate total energy by summing right+bottom contributions
@@ -114,7 +117,7 @@ def calculate_total_energy(spins: np.ndarray, J: float = 1.0) -> float:
 # ------------------------------------------------------------------
 # 4. Average energy per spin
 # ------------------------------------------------------------------
-@njit(cache=True,fastmath=True)
+@njit(cache=True, fastmath=True)
 def calculate_average_energy(spins: np.ndarray, J: float = 1.0) -> float:
     """
     Average energy per spin (= E_total / N_spins).
@@ -125,7 +128,7 @@ def calculate_average_energy(spins: np.ndarray, J: float = 1.0) -> float:
 # ------------------------------------------------------------------
 # 5A. Total Magnetization calculation
 # ------------------------------------------------------------------
-@njit(cache=True,fastmath=True)
+@njit(cache=True, fastmath=True)
 def compute_total_magnetization(spins: np.ndarray) -> float:
     """
     Returns total_magnetization
@@ -135,7 +138,7 @@ def compute_total_magnetization(spins: np.ndarray) -> float:
 # ------------------------------------------------------------------
 # 5B. Average Magnetization calculation
 # ------------------------------------------------------------------
-@njit(cache=True,fastmath=True)
+@njit(cache=True, fastmath=True)
 def compute_average_magnetization(spins: np.ndarray) -> float:
     """
     Returns  average_magnetization_per_spin.
@@ -148,25 +151,41 @@ def compute_average_magnetization(spins: np.ndarray) -> float:
 # 6. Lattice visualization
 # ------------------------------------------------------------------
 def plot_spin_configuration(spins: np.ndarray, title: str | None = None,
-                            cmap: str = "bwr") -> None:
+        cmap: str = "Greys") -> None:
     """
     Display the lattice using imshow.
     Spin +1 → red, spin −1 → blue.
     """
     plt.figure(figsize=(5, 5))
-    plt.imshow(spins, cmap=cmap, interpolation="nearest",
-               vmin=-1, vmax=1)
-    plt.colorbar(ticks=[-1, 1], label="Spin")
+    plt.imshow(spins, cmap=cmap, interpolation="nearest", vmin=-1, vmax=1 )
+    cbar = plt.colorbar(ticks=[-1, 1], label="Spin" )
+    cbar.ax.set_yticklabels(["-1", "+1"])
 
     if title:
         plt.title(title)
-    plt.xticks([]); plt.yticks([])
+
+    plt.xticks([])
+    plt.yticks([])
     plt.tight_layout()
     plt.show()
 
+# ------------------------------------------------------------------
+# 7A. Display simulation parameter
+# ------------------------------------------------------------------
+def print_parameter( L: int, J: float = 1 , p: float = 0.50, T: float = 0.0, steps: int = 0) -> None:
+    """
+    Display simulation parameter
+    """
+    print(f"Lattice size          : {L} × {L}")
+    print(f"Probability spin −1   : {p:.3f}")
+    print(f"Coupling constant J   : {J}")
+    print(f"Temperature           : {T}")
+    print(f"Time steps            : {steps}")
+
+
 
 # ------------------------------------------------------------------
-# 7. System information display
+# 7B. System information display
 # ------------------------------------------------------------------
 def print_system_info(spins: np.ndarray, J: float, p: float) -> None:
     """
@@ -178,20 +197,14 @@ def print_system_info(spins: np.ndarray, J: float, p: float) -> None:
     M_tot = compute_total_magnetization(spins)
     M_avg = compute_average_magnetization(spins)
 
-    print(f"Lattice size          : {L} × {L}")
-    print(f"Probability spin −1   : {p:.3f}")
-    print(f"Coupling constant J   : {J}")
     print("-" * 30)
     print(f"Total energy          : {E_tot: .3f}")
     print(f"Average energy per spin: {E_avg: .3f}")
     print(f"Total magnetization   : {M_tot: .3f}")
     print(f"Average magnetization : {M_avg: .3f}")
-    print("-" * 30)
-
-
 
 # ------------------------------------------------------------------
-# 8. Plot average   magnetization over  time
+# 8A. Plot average   magnetization over  time
 # ------------------------------------------------------------------
 def plot_magnetization(magnetizations,temperature):
     """ 
@@ -199,25 +212,71 @@ def plot_magnetization(magnetizations,temperature):
     """
     plt.ylim(-1.2,+1.2)
     plt.plot(magnetizations)
-    plt.xlabel('Numero di passi')
-    plt.ylabel('Magnetizzazione assoluta')
-    plt.title(f'Simulazione Ising 2D a T={temperature}')
+    plt.xlabel('Time Steps')
+    plt.ylabel('Magnetization')
+    plt.title(f'Ising 2D  T={temperature}')
     plt.show()
+
+
+
+# ------------------------------------------------------------------
+# 8. Plot average   energy over  time
+# ------------------------------------------------------------------
+def plot_energy(energy,temperature):
+    """ 
+    Plot of average energy over time
+    """
+    # plot energy evolving in time
+    plt.plot(energy)
+    plt.xlabel("Time step")
+    plt.ylabel("Energy", color='red')
+    plt.title(f'Ising 2D  T={temperature}')
+    plt.show()
+
 
 
 # ------------------------------------------------------------------
 # 9. Metropolis spin update
 # ------------------------------------------------------------------
-@njit(cache=True,fastmath=True)
 def metropolis_spin_update(spins,i,j,J,T):
     # Calcola la variazione di energia se si flippa lo spin
     # -2 for local site energy
     delta_E = -2 * local_bond_energy_all(spins,i,j,J)
 
     # Accetta il flip se diminuisce energia o con probabilità Boltzmann
-    if delta_E < 0 or np.random.random() < np.exp(-delta_E / T):
-        spins[i, j] *= -1  # Flip dello spin
+    if delta_E < 0:
+        spins[i, j] *= -1  # Spin Flip
+    else:
+        P_b = np.exp( - delta_E / T)   # relative probability Boltzmann distribution
+        if rng.random() < P_b:
+            spins[i, j] *= -1  # Spin Flip
 
     return spins
+
+
+# ------------------------------------------------------------------
+# 10. Glauber spin update
+# ------------------------------------------------------------------
+def glauber_spin_update(spins,i,j,J,T):
+    # Calcola la variazione di energia se si flippa lo spin
+    # -2 for local site energy
+    delta_E = -2 * local_bond_energy_all(spins,i,j,J)
+
+    # Compute Fermi distribution probability
+    P_Fermi  =  1.0 / (1.0 + np.exp(delta_E / T))
+
+    if rng.random() < P_Fermi:
+            spins[i, j] *= -1  # Spin Flip
+
+    return spins
+
+
+def glauber_step(lattice):
+    """Un singolo aggiornamento Glauber (heat-bath) su uno spin casuale."""
+    i = rng.integers(L)
+    j = rng.integers(L)
+    dE = delta_E(lattice, i, j)
+    if rng.random() < 1.0 / (1.0 + np.exp(dE / T)):
+        lattice[i, j] *= -1
 
 

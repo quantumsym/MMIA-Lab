@@ -2,6 +2,7 @@
 #
 import numpy as np
 import matplotlib.pyplot as plt
+from MonteCarlo import *
 
 # Parametri di base
 #
@@ -14,8 +15,11 @@ t_max    = 20.0         # tempo finale simulazione > t_half
 n_steps   = int((t_max - t0 ) / dt)    # numero di passi della simulazione
 tau      = t_half / np.log(2)          # costante decadimento esponenziale 
 
-# decadimento montecarlo
-def montecarlo_decay(N0=1000, tau=10.0, dt=0.1, t_max=20):
+#----------------------------------------------------------------
+#
+# funzione  decadimento montecarlo
+#
+def montecarlo_radioactive_decay(N0=1000, tau=10.0, dt=0.1, t_max=20):
 
     p_decay  = dt / tau      # probabilità di decadimento costante
     times, N = [0.0], [N0]
@@ -30,31 +34,14 @@ def montecarlo_decay(N0=1000, tau=10.0, dt=0.1, t_max=20):
 
     return np.array(times), np.array(N)
 
-
-# visualizzazione della simulazione e confronto con la soluzione analitica
-def plot_decay(t, N, tau):
-
-    plt.plot(t, N, '.')
-    plt.xlabel('Tempo')
-    plt.ylabel('Atomi residui')
-    plt.title('Decadimento Monte Carlo')
-    
-    #  Soluzione analitica
-    N = N0 * np.exp(-t/tau)
-    # grafico
-    plt.plot(t, N, color='red', linestyle='--')
-
-    plt.show()
-    
-
+#----------------------------------------------------------------
 #
-# Simulazione
+# Esecuzione simulazione
 #
-
-
-t, N = montecarlo_decay(N0,tau,dt,t_max)
-
-plot_decay(t, N, tau)
-
-
-
+if __name__ == "__main__":
+    
+    t, N = montecarlo_radioactive_decay(N0,tau,dt,t_max)
+    
+    plot_radioactive_decay(t, N, N0,  tau)
+    
+    

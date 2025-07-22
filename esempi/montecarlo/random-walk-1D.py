@@ -2,7 +2,7 @@
 #
 import numpy as np
 import matplotlib.pyplot as plt
-N = 50  # numero di passi
+N = 150  # numero di passi
 
 
 # random walk  1d

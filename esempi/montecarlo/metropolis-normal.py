@@ -6,11 +6,13 @@ import matplotlib.pyplot as plt
 # Numero di campioni 
 n_samples=1000
 
+#----------------------------------------------------------------
 # Distribuzione target: Gaussiana standard
 def target_distribution(x):
     return np.exp(-x**2 / 2)
 
-# Algoritmo di Metropolis
+#----------------------------------------------------------------
+# Algoritmo di Metropolis-Hastings
 def metropolis_hastings_simple(n_samples=1000, sigma=1.0):
     """
     Implementazione semplice di Metropolis-Hastings per campionare
@@ -43,25 +45,7 @@ def metropolis_hastings_simple(n_samples=1000, sigma=1.0):
 
     return np.array(samples), n_accepted / n_samples
 
-def plot_metropolis(samples):
-    # Visualizzazione della simulazione
-    plt.figure(figsize=(12, 5))
-    plt.subplot(1, 2, 1)
-    plt.plot(samples[:500])
-    plt.title(f'Trace Plot (primi 500 campioni)\nTasso accettazione: {acceptance_rate:.2f}')
-    plt.xlabel('Iterazione')
-    plt.ylabel('Valore campionato')
-    plt.subplot(1, 2, 2)
-    plt.hist(samples[100:], bins=50, density=True, alpha=0.7, label='Campioni MCMC')
-    x_theory = np.linspace(-4, 4, 100)
-    y_theory = np.exp(-x_theory**2 / 2) / np.sqrt(2 * np.pi)
-    plt.plot(x_theory, y_theory, 'r-', linewidth=2, label='Distribuzione teorica N(0,1)')
-    plt.legend()
-    plt.title('Distribuzione dei campioni')
-    plt.xlabel('Valore')
-    plt.ylabel('Densità')
-    plt.tight_layout()
-    plt.show()
+#----------------------------------------------------------------
     
 # Esecuzione
 samples, acceptance_rate = metropolis_hastings_simple(n_samples,sigma=1.0)
@@ -71,5 +55,5 @@ print(f"Media campioni: {np.mean(samples):.3f} (teorica: 0.000)")
 print(f"Std campioni: {np.std(samples):.3f} (teorica: 1.000)")
 
 # grafico
-plot_metropolis(samples)
+plot_metropolis_normal(samples)
 

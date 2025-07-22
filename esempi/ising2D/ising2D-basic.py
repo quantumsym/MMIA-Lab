@@ -11,14 +11,14 @@ from IsingModel2D import *
 L = 100      # lattice side length
 p = 0.6      # probability of spin −1
 J = 1.0      # coupling constant
-seed = 42    # fixed rng seed
 
 # ------------------------------------------------------------------
 
 if __name__ == "__main__":
 
     # Initialize lattice and analyze
-    lattice = initialize_lattice(seed,L, p)
+    lattice = initialize_lattice(L, p)
+    print_parameter(L, J, p)
     print_system_info(lattice, J, p)
 
     # Local right+bottom energy of a single site (example)
