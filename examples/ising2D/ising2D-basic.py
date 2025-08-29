@@ -8,8 +8,8 @@ from IsingModel2D import *
 #------------------------------------------------------------------------
 #
 # Test parameters
-L = 100      # lattice side length
-p = 0.6      # probability of spin −1
+L = 50      # lattice side length
+p = 0.3      # probability of spin −1
 J = 1.0      # coupling constant
 
 # ------------------------------------------------------------------

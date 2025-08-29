@@ -7,7 +7,7 @@ from IsingModel2D import *
 
 # Parametri principali
 L =  50               # Dimensione del lattice (50x50)
-T = 2.0               # Temperatura iniziale (vicino alla T critica ~2.27), costante Boltzmann = 1
+T = 4.0               # Temperatura iniziale (vicino alla T critica ~2.27), costante Boltzmann = 1
 num_steps = 2000      # Numero di passi di evoluzione
 equilibration = 200   # Numero di passi di equilibrio termico (per raggiungere stato stazionario)
 p = 0.5               # probability of spin −1

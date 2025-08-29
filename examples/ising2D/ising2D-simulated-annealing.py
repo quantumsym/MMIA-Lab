@@ -41,10 +41,10 @@ if __name__ == "__main__":
         lattice = simulated_annealing_step(lattice, J, T_current)
 
         # Raffredda il sistema usando il cooling schedule esponenziale
-        T_current = sa_exponential_cooling_schedule(T_current, cooling_rate)
+        # T_current = sa_exponential_cooling_schedule(T_current, cooling_rate)
 
         # Alternative: usa cooling schedule lineare
-        # T_current = sa_linear_cooling_schedule(step, num_steps, T_initial, T_final)
+        T_current = sa_linear_cooling_schedule(step, num_steps, T_initial, T_final)
 
         # Dopo un certo numero di passi di equilibrio, registra le osservabili
         if step >= equilibration:
