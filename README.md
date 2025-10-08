@@ -9,10 +9,14 @@ Autori:
 Brunello Tirozzi, Camillo Tassi, Sandro Magrì
 
 
-![Metodi Matematici dell'Intelligenza Artificiale](cover02.jpeg)
+![Mathematical Methods of Artificial Intelligence](cover03.jpeg)
 
 
-Per informazioni scrivere a sandro@freenetst.it od a s.magri@quantumsym.com
+Per informazioni scrivere a:
+ sandro@freenetst.it 
+
+oppure a:
+s.magri@quantumsym.com
 
 
 
