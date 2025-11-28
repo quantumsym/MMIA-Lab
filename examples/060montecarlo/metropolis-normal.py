@@ -2,9 +2,10 @@
 #
 import numpy as np
 import matplotlib.pyplot as plt
+from MonteCarlo import * 
 
 # Numero di campioni 
-n_samples=1000
+n_samples=500
 
 #----------------------------------------------------------------
 # Distribuzione target: Gaussiana standard
@@ -55,5 +56,7 @@ print(f"Media campioni: {np.mean(samples):.3f} (teorica: 0.000)")
 print(f"Std campioni: {np.std(samples):.3f} (teorica: 1.000)")
 
 # grafico
-plot_metropolis_normal(samples)
+plot_metropolis_normal(samples, acceptance_rate, n_samples)
+#
+
 

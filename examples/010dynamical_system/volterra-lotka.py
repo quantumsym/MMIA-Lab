@@ -75,6 +75,8 @@ def plot_volterra_lotka(time_array,prey_population,predator_population):
     ax2.grid(True, alpha=0.3)
     
     plt.tight_layout()
+    plt.savefig("volterra-lotka.svg")
+    plt.savefig("volterra-lotka.pdf")
     plt.show()
     return
 

@@ -323,7 +323,6 @@ def plot_convergence(f, grad_f, x0, x_min, path, costs, learning_rate=0.01):
     plt.suptitle('Convergence Analysis\n(Press Q to close)', fontsize=14, y=0.98)
     plt.tight_layout()
     plt.subplots_adjust(bottom=0.25)  # Make room for statistics
-
     # Set up key press event to close with 'q'
     def on_key(event):
         if event.key == 'q':

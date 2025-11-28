@@ -76,6 +76,7 @@ def plot_gibbs_samples(gibbs_samples):
     plt.ylabel('Y')
     plt.grid(True)
     plt.tight_layout()
+    plt.savefig("gibbs_samples.svg")
     plt.show()
 
 
@@ -100,6 +101,7 @@ def plot_bivariate_normal_samples(direct_samples):
     plt.ylabel('Y')
     plt.grid(True)
     plt.tight_layout()
+    plt.savefig("bivariate_normal_samples.svg")
     plt.show()
 
 #----------------------------------------------------------------
@@ -174,11 +176,12 @@ def plot_radioactive_decay(t, N, N0, tau):
 
     # Plot analytical solution as dashed red line
     plt.plot(t, N_analytical, color='red', linestyle='--')
+    plt.savefig("radioactive_decay.svg")
     plt.show()
 
 #-----------------------------------------------------------------------------------
 
-def plot_metropolis_normal(samples):
+def plot_metropolis_normal(samples, acceptance_rate, n_samples):
     """
     Visualization of Metropolis-Hastings sampling results for normal distribution.
 
@@ -197,10 +200,10 @@ def plot_metropolis_normal(samples):
     # Visualization of the simulation
     plt.figure(figsize=(12, 5))
 
-    # Trace plot (first 500 samples)
+    # Trace plot (n_samples)
     plt.subplot(1, 2, 1)
-    plt.plot(samples[:500])
-    plt.title(f'Trace Plot (First 500 Samples)\nAcceptance Rate: {acceptance_rate:.2f}')
+    plt.plot(samples[:n_samples])
+    plt.title(f'Trace Plot ( {n_samples} Samples)\nAcceptance Rate: {acceptance_rate:.2f}')
     plt.xlabel('Iteration')
     plt.ylabel('Sampled Value')
 
@@ -218,4 +221,5 @@ def plot_metropolis_normal(samples):
     plt.xlabel('Value')
     plt.ylabel('Density')
     plt.tight_layout()
+    plt.savefig("metropolis_normal.svg")
     plt.show()

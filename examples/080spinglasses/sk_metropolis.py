@@ -494,6 +494,7 @@ def plot_evolution(magnetizations, energies, T):
         ax2.legend()
     
     plt.tight_layout()
+    plt.savefig("sk_metropolis_energies_magnetization.svg")
     plt.show()
 
 def plot_distributions(magnetizations, energies, T):
@@ -550,6 +551,7 @@ def plot_distributions(magnetizations, energies, T):
     
     plt.suptitle(f'Equilibrium Distributions - Metropolis SK (T={T})')
     plt.tight_layout()
+    plt.savefig("sk_metropolis_histograms.svg")
     plt.show()
 
 def plot_autocorrelation(data, max_lag=100, observable_name="Observable"):
@@ -601,6 +603,7 @@ def plot_autocorrelation(data, max_lag=100, observable_name="Observable"):
     plt.title(f'Autocorrelation Analysis - {observable_name}')
     plt.legend()
     plt.grid(True, alpha=0.3)
+    plt.savefig("sk_metropolis_autocorrelation.svg")
     plt.show()
     
     # Estimate correlation time

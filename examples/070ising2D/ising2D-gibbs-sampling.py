@@ -6,33 +6,16 @@ import matplotlib.pyplot as plt
 from IsingModel2D import *
 
 
-# Parametri principali
-L =  50               # Dimensione lato del reticolo (50x50)
-T = 2.0               # Temperatura iniziale (T_critica ~ 2.27), costante Boltzmann = 1
-num_steps = 2000      # Numero di passi di evoluzione temporale
-equilibration = 200   # Numero di passi per raggiungere equilibrio termico (stima)
+# Main parameters
+L = 50                # Lattice side dimension (50x50)
+T = 2.0               # Initial temperature (T_critical ~ 2.27), Boltzmann constant = 1
+num_steps = 2000      # Number of time evolution steps
+equilibration = 200   # Number of steps to reach thermal equilibrium (estimate)
 p = 0.5               # probability of spin −1
 J = 1.0               # coupling constant
 B = 0.0               # optional magnetic field
 
-# --------------------------------------------------------------------------------------
-
-def gibbs_sampling(spins, i, j, J=1.0, B=0.0, beta= 1.0):
-    # Calcola il campo locale
-    h_local = calculate_local_field(spins, i, j, J, B)
-
-    # Probabilità condizionale per spin up
-    P_up = 1.0 / (1.0 + np.exp(-2 * beta * h_local))
-
-    # Campionamento dalla distribuzione condizionale
-    if rng.random() < P_up : 
-        spins[i, j] = 1 
-    else:
-        spins[i, j] = -1
-
-    return spins
-
-# --------------------------------------------------------------------------------------
+# ---------------------------------------------
 
 if __name__ == "__main__":
     
@@ -46,21 +29,21 @@ if __name__ == "__main__":
     # Save start time for performance comparison
     start = time.time()
 
-    # Lista per memorizzare magnetizzazione nel tempo
+    # List to store magnetization over time
     magnetizations = []
     energies = []
 
     beta = 1.0 / T
     
-    # Evoluzione del sistema - Campionamento di Gibbs
+    # System evolution - Gibbs Sampling
     for step in range(num_steps):
 
-        # Scansione sistematica di tutti gli spin
+        # Systematic scan of all spins
         for i in range(L):
             for j in range(L):
                 lattice = gibbs_sampling(lattice, i, j, J, B, beta)
 
-        # Dopo un certo numero di passi, di equilibrio termico, calcola le osservabili
+        # After a certain number of steps, at thermal equilibrium, calculate the observables
         if step >= equilibration:
             # magnetization over time
             mag = compute_average_magnetization(lattice)
@@ -86,5 +69,3 @@ if __name__ == "__main__":
     plot_title = f"2D Ising Model {L}×{L} — T={T} "
     # Visualize configuration
     plot_spin_configuration(lattice,title=plot_title)
-
-

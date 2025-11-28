@@ -57,6 +57,8 @@ plt.axhline(y=0, color='k', linestyle='--', alpha=0.5)
 # Display the plot
 # plt.show() renders and displays the plot
 plt.tight_layout()  # Adjusts spacing to prevent label cutoff
+plt.savefig("damped_oscillations02.svg")
+plt.savefig("damped_oscillations02.pdf")
 plt.show()
 
 # Print some information about the function

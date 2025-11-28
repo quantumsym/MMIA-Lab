@@ -191,6 +191,8 @@ def plot_spin_configuration(spins: np.ndarray, title: str | None = None,
     plt.xticks([])
     plt.yticks([])
     plt.tight_layout()
+    plt.savefig('ising2D-spin-configuration.svg')
+    plt.savefig('ising2D-spin-configuration.pdf')
     plt.show()
 
 # ------------------------------------------------------------------
@@ -239,6 +241,8 @@ def plot_magnetization(magnetizations,temperature):
     plt.xlabel('Time Steps')
     plt.ylabel('Magnetization')
     plt.title(f'Ising 2D  T={temperature}')
+    plt.savefig('ising2D-magnetization.svg')
+    plt.savefig('ising2D-magnetization.pdf')
     plt.show()
 
 
@@ -255,6 +259,8 @@ def plot_energy(energy,temperature):
     plt.xlabel("Time step")
     plt.ylabel("Energy", color='red')
     plt.title(f'Ising 2D  T={temperature}')
+    plt.savefig('ising2D-average-energy.svg')
+    plt.savefig('ising2D-average-energy.pdf')
     plt.show()
 
 
@@ -374,6 +380,8 @@ def plot_sa_temperature_step(equilibration,num_steps,temperature_history):
     plt.ylabel('Temperature')
     plt.title('Temperature Schedule - Simulated Annealing')
     plt.grid(True, alpha=0.3)
+    plt.savefig('ising2D-annealing-temperature.svg')
+    plt.savefig('ising2D-annealing-temperature.pdf')
     plt.show()
 
 #----------------------------------------------------------------------
@@ -401,7 +409,57 @@ def wolff_cluster_update(spins, J, beta):
     return spins
 
 
-#
+
+#----------------------------------------------------------------------
+# 25. Gibbs  Sampling
+#----------------------------------------------------------------------
+
+def gibbs_sampling(spins, i, j, J=1.0, B=0.0, beta= 1.0):
+    # Calculate the local field
+    h_local = calculate_local_field(spins, i, j, J, B)
+
+    # Conditional probability for spin up
+    P_up = 1.0 / (1.0 + np.exp(-2 * beta * h_local))
+
+    # Sampling from the conditional distribution
+    if rng.random() < P_up :
+        spins[i, j] = 1
+    else:
+        spins[i, j] = -1
+
+    return spins
+
+
 #
 #-----------------------------------------------------------------
+
+"""
+2D Ising Model - Modular version with local bond energy function
+Author: S.Magrì <s.magri@quantumsym.com>  luglio 2025
+"""
+#------------------------------------------------------------------------
+#
+# Test parameters
+L = 50      # lattice side length
+p = 0.3      # probability of spin −1
+J = 1.0      # coupling constant
+
+# ------------------------------------------------------------------
+
+if __name__ == "__main__":
+
+    # Initialize lattice and analyze
+    lattice = initialize_lattice(L, p)
+    print_parameter(L, J, p)
+    print_system_info(lattice, J, p)
+
+    # Local right+bottom energy of a single site (example)
+    i0, j0 = 5, 7
+    e_rb = local_bond_energy_rb(lattice, i0, j0, J)
+    print(f"Right+bottom energy of spin ({i0}, {j0}): {e_rb: .3f}\n")
+
+    # set plot title
+    plot_title = f"2D Ising Model {L}×{L} — p={p}, J={J}"
+    # Visualize configuration
+    plot_spin_configuration(lattice,title=plot_title)
 

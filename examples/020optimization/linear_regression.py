@@ -60,6 +60,7 @@ def plot_simulation(X,Y,m,b,y_pred_final):
     plt.grid(True)
     
     # Show the plot
+    plt.savefig("linear_regression01.svg")
     plt.show()
     
     return 
